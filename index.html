@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Temperature Converter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./src/output.css">
+</head>
+
+<body class="bg-sky-300 flex items-center justify-center min-h-screen">
+    <div class="bg-sky-400 shadow-lg rounded-lg p-8 w-full max-w-md text-center">
+        <h2 class="text-2xl font-bold mb-6 text-white">Temperature Converter</h2>
+
+        <!-- Input field -->
+        <input type="number" id="tempInput" placeholder="Enter value"
+            class="w-full border border-gray-200 rounded-md p-2 mb-4 focus:ring-2 focus:ring-blue-400">
+
+        <!-- Unit selector -->
+        <select id="unitInput"
+            class="w-full border border-gray-200 rounded-md p-2 mb-4 focus:ring-2 focus:ring-blue-400">
+            <option value="C">Celsius</option>
+            <option value="F">Fahrenheit</option>
+            <option value="K">Kelvin</option>
+        </select>
+
+        <!-- Convert button -->
+        <button onclick="convertTemp()"
+            class="w-full bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 transition">
+            Convert
+        </button>
+
+        <!-- Result area -->
+        <div id="result" class="mt-6"></div>
+    </div>
+
+
+    <!-- Footer Section -->
+    <footer
+        class=" absolute bottom-0 left-0 w-full py-6 text-center text-sm text-gray-900 bg-sky-400/60 backdrop-blur-sm border-t border-sky-200/60">
+        <p class="font-bold">© Copyright claim belongs to MD SABBIR HOSSAIN 2026</p>
+    </footer>
+
+    <script>
+        function convertTemp() {
+            const tempInput = document.getElementById('tempInput');
+            const value = parseFloat(tempInput.value);
+            const unit = document.getElementById('unitInput').value;
+            const resultDiv = document.getElementById('result');
+
+            if (isNaN(value)) {
+                resultDiv.innerHTML = `
+                    <div class="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm font-medium">
+                        Please enter a valid numeric temperature value.
+                    </div>`;
+                return;
+            }
+
+            let celsius;
+            if (unit === "C") celsius = value;
+            else if (unit === "F") celsius = (value - 32) * 5 / 9;
+            else if (unit === "K") celsius = value - 273.15;
+
+            if (celsius < -273.15) {
+                resultDiv.innerHTML = `
+                    <div class="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm font-medium">
+                        Value below absolute zero (-273.15°C / 0 K) is not possible!
+                    </div>`;
+                return;
+            }
+
+            const fahrenheit = (celsius * 9 / 5) + 32;
+            const kelvin = celsius + 273.15;
+
+            resultDiv.innerHTML = `
+                <div class="bg-blue-50/80 border border-blue-100 rounded-xl p-4 text-left shadow-inner space-y-2">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-blue-700">Converted Results</p>
+                    <div class="grid grid-cols-3 gap-2 text-center pt-1">
+                        <div class="bg-white rounded-lg p-2 border border-blue-200 shadow-sm">
+                            <span class="block text-xs text-gray-500">Celsius</span>
+                            <span class="font-bold text-gray-800 text-sm md:text-base">${celsius.toFixed(2)} °C</span>
+                        </div>
+                        <div class="bg-white rounded-lg p-2 border border-blue-200 shadow-sm">
+                            <span class="block text-xs text-gray-500">Fahrenheit</span>
+                            <span class="font-bold text-gray-800 text-sm md:text-base">${fahrenheit.toFixed(2)} °F</span>
+                        </div>
+                        <div class="bg-white rounded-lg p-2 border border-blue-200 shadow-sm">
+                            <span class="block text-xs text-gray-500">Kelvin</span>
+                            <span class="font-bold text-gray-800 text-sm md:text-base">${kelvin.toFixed(2)} K</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+
+</html>
